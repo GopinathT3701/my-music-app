@@ -1,6 +1,6 @@
 function MusicApp() {
   const songs = [
-    { title: "Song 1", url: "/songs/Avalum-Naanum.mp3" },
+    { title: "Song 1", url: "https://music-app088.netlify.app/songs/Avalum-Naanum.mp3" },
     { title: "Song 2", url: "/songs/song2.mp3" }
   ];
 
