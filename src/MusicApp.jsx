@@ -1,16 +1,18 @@
-function MusicApp() {
-  const songs = [
-    { title: "Song 1", url: "https://music-app088.netlify.app/songs/Avalum-Naanum.mp3" },
-    { title: "Song 2", url: "/songs/song2.mp3" }
-  ];
+const songs = [
+  { title: "Avalum Naanum", url: "/songs/Avalum-Naanum.mp3" }
+];
 
+function MusicApp() {
   return (
     <div>
-      <h2>🎵 My Songs</h2>
+      <h2>🎵 Tamil Songs</h2>
       {songs.map((song, i) => (
         <div key={i}>
           <p>{song.title}</p>
-          <audio controls src={song.url}></audio>
+          <audio controls>
+            <source src={song.url} type="audio/mp3" />
+            Your browser does not support the audio tag.
+          </audio>
         </div>
       ))}
     </div>
