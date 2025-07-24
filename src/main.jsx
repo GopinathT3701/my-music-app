@@ -3,6 +3,7 @@ import { createRoot } from 'react-dom/client'
 import './index.css'
 
 import MusicApp from './MusicApp.jsx'
+import MusicDashboard from './MusicDashboard.jsx'
 
 
 
@@ -10,7 +11,8 @@ import MusicApp from './MusicApp.jsx'
 
 createRoot(document.getElementById('root')).render(
   
-   <MusicApp/>
+   <MusicDashboard/>
+
   
 )
 
