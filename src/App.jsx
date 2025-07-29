@@ -1,6 +1,6 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import MusicDashboard from "./MusicDashboard";
-import NowPlayingPage from "./Nowplayingpage.jsx";
+import NowPlayingpage from "./Nowplayingpage.jsx";
 
 function App() {
   return (
@@ -11,7 +11,7 @@ function App() {
 
       <Routes>
         <Route path="/" element={<MusicDashboard />} />
-        <Route path="/nowplaying" element={<NowPlayingPage />} />
+        <Route path="/nowplaying" element={<NowPlayingpage />} />
       </Routes>
    </>
   );
