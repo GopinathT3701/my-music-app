@@ -4,15 +4,16 @@ import './index.css'
 
 import MusicApp from './MusicApp.jsx'
 import MusicDashboard from './MusicDashboard.jsx'
-
+import App from './App.jsx'
+import { BrowserRouter } from 'react-router-dom'
 
 
 
 
 createRoot(document.getElementById('root')).render(
-  
-   <MusicDashboard/>
-
+  <BrowserRouter>
+   <App/>
+</BrowserRouter>
   
 )
 

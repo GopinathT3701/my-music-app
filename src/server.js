@@ -2,20 +2,19 @@ import express from "express";
 import mysql from "mysql2";
 import cors from "cors"; 
 
-
 const app = express();
 app.use(cors());
 app.use(express.json());
 
-// DB Connection
-let db = mysql.createConnection({
+// ✅ DB Connection
+const db = mysql.createConnection({
   host: "localhost",
   user: "root",
-  password: "root", // your password
+  password: "root",  // 🔐 Change this if needed
   database: "music-app"
 });
 
-// Test DB connection
+// ✅ Test DB Connection
 db.connect((err) => {
   if (err) {
     console.error("❌ DB connection failed:", err.message);
@@ -24,7 +23,7 @@ db.connect((err) => {
   }
 });
 
-// Get all songs
+// ✅ GET All Songs
 app.get("/songs", (req, res) => {
   db.query("SELECT * FROM songs", (err, results) => {
     if (err) return res.status(500).send(err);
@@ -32,12 +31,30 @@ app.get("/songs", (req, res) => {
   });
 });
 
+// ✅ POST - Add a New Song
+app.post("/songs", (req, res) => {
+  const { title, artist, url, img, duration } = req.body;
 
+  if (!title || !artist || !url || !img || !duration) {
+    return res.status(400).json({ message: "❌ All fields are required" });
+  }
+
+  const sql = `
+    INSERT INTO songs (title, artist, url, img, duration)
+    VALUES (?, ?, ?, ?, ?)
+  `;
+
+  db.query(sql, [title, artist, url, img, duration], (err, result) => {
+    if (err) return res.status(500).send(err);
+    res.status(201).json({ message: "✅ Song added successfully", id: result.insertId });
+  });
+});
+
+// ✅ PUT - Update Existing Song
 app.put("/songs/:id", (req, res) => {
   const { id } = req.params;
   const { title, artist, url, img, duration } = req.body;
 
-  // Check for missing fields (optional but good)
   if (!title || !artist || !url || !img || !duration) {
     return res.status(400).json({ message: "❌ All fields are required" });
   }
@@ -59,21 +76,7 @@ app.put("/songs/:id", (req, res) => {
   });
 });
 
-
-
-
-
-// Add a new song
-app.post("/songs", (req, res) => {
-  const { title, artist, url, img, duration } = req.body;
-  db.query(
-    "INSERT INTO songs (title, artist, url, img, duration) VALUES (?, ?, ?, ?, ?)",
-    [title, artist, url, img, duration],
-    (err, result) => {
-      if (err) return res.status(500).send(err);
-      res.status(201).json({ message: "✅ Song added successfully" });
-    }
-  );
+// ✅ Start Server
+app.listen(3001, () => {
+  console.log("🚀 Server running on http://localhost:3001");
 });
-
-app.listen(3001, () => console.log("🚀 Server running on http://localhost:3001"));

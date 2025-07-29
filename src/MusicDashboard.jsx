@@ -1,67 +1,38 @@
-import { useState, useRef, useEffect } from "react";
-import {
-  IoPlaySkipBackCircleOutline,
-  IoPlaySkipForwardCircleOutline,
-  IoHome,
-} from "react-icons/io5";
-import { FaHeart, FaPlay, FaPause, FaSignOutAlt } from "react-icons/fa";
+import { useState, useEffect } from "react";
+import { IoHome } from "react-icons/io5";
+import { FaSignOutAlt } from "react-icons/fa";
 import { BiSolidAlbum } from "react-icons/bi";
 import "./index.css";
 import axios from "axios";
+import SpotifySearch from "./SpotifySearch";
+import { useNavigate } from "react-router-dom";
 
 export default function MusicDashboard() {
   const [songs, setSongs] = useState([]);
-  const [currentIndex, setCurrentIndex] = useState(0);
-  const [isPlaying, setIsPlaying] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
-  const audioRef = useRef(null);
+  const [spotifyResults, setSpotifyResults] = useState([]);
+  const [showingSpotifyResults, setShowingSpotifyResults] = useState(false);
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     axios
       .get("http://localhost:3001/songs")
-      .then((response) => {
-        setSongs(response.data);
-      })
-      .catch((error) => {
-        console.error("Error fetching songs:", error);
-      });
+      .then((response) => setSongs(response.data))
+      .catch((error) => console.error("Error fetching songs:", error));
   }, []);
 
-  const currentSong = songs[currentIndex] || {};
   const filteredSongs = songs.filter((song) =>
     song.title.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
-  const togglePlay = () => {
-    if (audioRef.current) {
-      if (isPlaying) {
-        audioRef.current.pause();
-      } else {
-        audioRef.current.play();
-      }
-      setIsPlaying(!isPlaying);
-    }
-  };
+  const songsToShow = showingSpotifyResults ? spotifyResults : filteredSongs;
 
-  const playNext = () => {
-    const nextIndex = (currentIndex + 1) % filteredSongs.length;
-    setCurrentIndex(nextIndex);
+  const handlePlayClick = (song) => {
+    navigate("/nowplaying", {
+      state: { song, isSpotify: showingSpotifyResults },
+    });
   };
-
-  const playPrev = () => {
-    const prevIndex = (currentIndex - 1 + filteredSongs.length) % filteredSongs.length;
-    setCurrentIndex(prevIndex);
-  };
-
-  useEffect(() => {
-    if (audioRef.current) {
-      audioRef.current.pause();
-      audioRef.current.load();
-      if (isPlaying) {
-        audioRef.current.play();
-      }
-    }
-  }, [currentIndex]);
 
   return (
     <div className="dashboard-container">
@@ -77,77 +48,49 @@ export default function MusicDashboard() {
             <h2>User</h2>
             <p>userid@gmail.com</p>
           </div>
-
           <nav className="nav-links">
-            <a href="#" className="active">
-              <IoHome /> Home
-            </a>
+            <a href="#" className="active"><IoHome /> Home</a>
             <a href="#">Browse</a>
-            <a href="#">
-              <BiSolidAlbum /> Album
-            </a>
+            <a href="#"><BiSolidAlbum /> Album</a>
             <a href="#">Favourite</a>
             <a href="#">Recently Played</a>
           </nav>
         </div>
-        <button className="logout-btn">
-          <FaSignOutAlt /> Logout
-        </button>
+        <button className="logout-btn"><FaSignOutAlt /> Logout</button>
       </aside>
 
-      {/* Main Content */}
+      {/* Main */}
       <main className="main-content">
-        <div className="search-bar">
-          <input
-            type="text"
-            placeholder="Search songs..."
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
+        <div className="spotify-search">
+          <h2>Search</h2>
+          <SpotifySearch
+            setSpotifyResults={setSpotifyResults}
+            setShowingSpotifyResults={setShowingSpotifyResults}
           />
         </div>
 
-        {/* Song Grid */}
+        {!showingSpotifyResults && <h2 className="song-header">Trending Songs</h2>}
+
         <div className="song-grid">
-          {filteredSongs.map((song, i) => (
+          {songsToShow.map((song, i) => (
             <div
               key={i}
               className="song-card"
-              onClick={() => {
-                setCurrentIndex(i);
-                setIsPlaying(true);
-              }}
+              onClick={() => handlePlayClick(song)}
             >
-              <img src={song.img} alt="img" />
-              <h3>{song.title}</h3>
-              <p>{song.artist}</p>
+              <img
+                src={showingSpotifyResults ? song.album.images[0]?.url : song.img}
+                alt="cover"
+              />
+              <h3>{showingSpotifyResults ? song.name : song.title}</h3>
+              <p>
+                {showingSpotifyResults
+                  ? song.artists.map((a) => a.name).join(", ")
+                  : song.artist}
+              </p>
             </div>
           ))}
         </div>
-
-        {/* Now Playing */}
-        {filteredSongs.length > 0 && (
-          <div className="now-playing">
-            <img src={currentSong.img} alt="Now Playing" />
-            <div className="now-playing-info">
-              <h4>{currentSong.title}</h4>
-              <p>{currentSong.artist}</p>
-              <audio ref={audioRef} onEnded={playNext}>
-                <source src={currentSong.url} type="audio/mp3" />
-              </audio>
-            </div>
-            <div className="controls-btn">
-              <button onClick={playPrev}>
-                <IoPlaySkipBackCircleOutline />
-              </button>
-              <button className="play-btn" onClick={togglePlay}>
-                {isPlaying ? <FaPause /> : <FaPlay />}
-              </button>
-              <button onClick={playNext}>
-                <IoPlaySkipForwardCircleOutline />
-              </button>
-            </div>
-          </div>
-        )}
       </main>
     </div>
   );
