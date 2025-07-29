@@ -1,6 +1,5 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import MusicDashboard from "./MusicDashboard";
-import NowPlayin from "./NowPlayin"; // create this
 import NowPlayingPage from "./Nowplayingpage";
 
 function App() {
