@@ -1,6 +1,6 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import MusicDashboard from "./MusicDashboard";
-import NowPlayingpage from "./Nowplayingpage.jsx";
+import Nowplayingpage from "./Nowplayingpage.jsx";
 
 function App() {
   return (
@@ -10,8 +10,8 @@ function App() {
     </nav> */}
 
       <Routes>
-        <Route path="/" element={<MusicDashboard />} />
-        <Route path="/nowplaying" element={<NowPlayingpage />} />
+        <Route path="/" element={<MusicDashboard/>} />
+        <Route path="/nowplaying" element={<Nowplayingpage/>} />
       </Routes>
    </>
   );

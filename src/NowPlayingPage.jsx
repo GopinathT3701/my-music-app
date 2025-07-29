@@ -1,6 +1,6 @@
 import { useLocation, useNavigate } from "react-router-dom";
 
-export default function NowPlayingpage() {
+export default function Nowplayingpage() {
   const location = useLocation();
   const navigate = useNavigate();
   const song = location.state?.song;
