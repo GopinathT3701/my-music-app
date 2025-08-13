@@ -76,6 +76,6 @@ app.put("/songs/:id", (req, res) => {
 });
 
 // ✅ Start Server
-app.listen(4001, () => {
-  console.log("🚀 Server running on http://localhost:4001");
+app.listen(3001, () => {
+  console.log("🚀 Server running on http://localhost:3001");
 });

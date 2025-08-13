@@ -19,7 +19,7 @@ export default function MusicDashboard() {
 
   useEffect(() => {
     axios
-      .get("http://localhost:4001/songs")
+      .get("http://localhost:3001/songs")
       .then((response) => setSongs(response.data))
       .catch((error) => console.error("Error fetching songs:", error));
   }, []);

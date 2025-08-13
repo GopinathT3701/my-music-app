@@ -1,6 +1,6 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import MusicDashboard from "./MusicDashboard";
-import NowPlaying from "./Nowplayingpage.jsx";
+import NowPlaying from "./Nowplaying.jsx";
 import Album from "./Album.jsx";
 import ArtistSearch from "./artist.jsx";
 import Btn from "./playbtn.jsx";
