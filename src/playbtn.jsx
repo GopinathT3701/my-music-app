@@ -60,7 +60,7 @@ function Btn() {
   return (
     <div>
       {!token ? (
-        <a href="http://localhost:3001/login">Login with Spotify</a>
+        <a href="http://localhost:3000/login">Login with Spotify</a>
       ) : (
         <button onClick={playTrack}>Play Song</button>
       )}
