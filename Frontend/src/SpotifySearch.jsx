@@ -1,13 +1,13 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
-import dotenv from "dotenv";
+// import dotenv from "dotenv";
 
-dotenv.config();
-const clientId = process.env.CLIENT_ID;
-const  clientSecret = process.env.CLIENT_SECRET;
+// dotenv.config();
+// const clientId = process.env.CLIENT_ID;
+// const  clientSecret = process.env.CLIENT_SECRET;
 
-// const clientId = "7fb52a62c4d249c9b024fa433d390c0e";
-// const clientSecret = "5cfb9129c1ac4cf6ba230aa88622eadb";
+const clientId = "7fb52a62c4d249c9b024fa433d390c0e";
+const clientSecret = "5cfb9129c1ac4cf6ba230aa88622eadb";
 
 export default function SpotifySearch({ setSpotifyResults, setShowingSpotifyResults }) {
   const [accessToken, setAccessToken] = useState("");
