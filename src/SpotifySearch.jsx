@@ -1,8 +1,8 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
+import dotenv from "dotenv";
 
-
-
+dotenv.config();
 const clientId = process.env.CLIENT_ID;
 const  clientSecret = process.env.CLIENT_SECRET;
 

@@ -11,7 +11,7 @@ function Btn() {
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
     if (params.get("code")) {
-      fetch(`https://music-app088.netlify.app/?code=${params.get("code")}`)
+      fetch(`https://isai-app.netlify.app/?code=${params.get("code")}`)
         .then(res => res.json())
         .then(data => setToken(data.access_token));
          console.log("Fetched Token:", data.access_token); 
@@ -60,7 +60,7 @@ function Btn() {
   return (
     <div>
       {!token ? (
-        <a href="http://localhost:3001/login">Login with Spotify</a>
+        <a href="http://localhost:3000/login">Login with Spotify</a>
       ) : (
         <button onClick={playTrack}>Play Song</button>
       )}

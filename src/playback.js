@@ -8,8 +8,8 @@ dotenv.config(); // load .env
 const app = express();
 app.use(cors());
 
-const keyId = process.env.CLIENT_ID;
-const keySecret = process.env.CLIENT_SECRET;
+const keyId = process.env.VITE_CLIENT_ID;
+const keySecret = process.env.VITE_CLIENT_SECRET;
 const auth = Buffer.from(`${keyId}:${keySecret}`).toString("base64");
 
 app.get("/login", (req, res) => {
@@ -20,7 +20,7 @@ app.get("/login", (req, res) => {
     "user-modify-playback-state"
   ].join(" ");
 
-  const redirect_uri = encodeURIComponent("https://music-app088.netlify.app/");
+  const redirect_uri = encodeURIComponent("https://isai-app.netlify.app");
 
   const authUrl = `https://accounts.spotify.com/authorize?response_type=code&client_id=${keyId}&scope=${encodeURIComponent(scopes)}&redirect_uri=${redirect_uri}`;
   res.redirect(authUrl);
@@ -37,7 +37,7 @@ app.get("/callback", async (req, res) => {
     },
     body: new URLSearchParams({
       code,
-      redirect_uri: "https://music-app088.netlify.app/",
+      redirect_uri: "https://isai-app.netlify.app",
       grant_type: "authorization_code"
     })
   });
