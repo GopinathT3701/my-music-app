@@ -2,10 +2,12 @@ import { useState, useEffect } from "react";
 import { IoHome } from "react-icons/io5";
 import { FaSignOutAlt } from "react-icons/fa";
 import { BiSolidAlbum } from "react-icons/bi";
+import { BsBrowserEdge } from "react-icons/bs";
 import "./index.css";
 import axios from "axios";
 import SpotifySearch from "./SpotifySearch";
 import { useNavigate } from "react-router-dom";
+import { MdOutlineFavorite } from "react-icons/md";
 
 export default function MusicDashboard() {
   const [songs, setSongs] = useState([]);
@@ -17,7 +19,7 @@ export default function MusicDashboard() {
 
   useEffect(() => {
     axios
-      .get("http://localhost:3001/songs")
+      .get("http://localhost:4001/songs")
       .then((response) => setSongs(response.data))
       .catch((error) => console.error("Error fetching songs:", error));
   }, []);
@@ -50,9 +52,9 @@ export default function MusicDashboard() {
           </div>
           <nav className="nav-links">
             <a href="#" className="active"><IoHome /> Home</a>
-            <a href="#">Browse</a>
-            <a href="#"><BiSolidAlbum /> Album</a>
-            <a href="#">Favourite</a>
+            <a href="/browse"><BsBrowserEdge /> Browse</a>
+            <a href="/Album"><BiSolidAlbum /> Album</a>
+            <a href="#"><MdOutlineFavorite /> Favourite</a>
             <a href="#">Recently Played</a>
           </nav>
         </div>
@@ -70,7 +72,6 @@ export default function MusicDashboard() {
         </div>
 
         {!showingSpotifyResults && <h2 className="song-header">Trending Songs</h2>}
-
         <div className="song-grid">
           {songsToShow.map((song, i) => (
             <div

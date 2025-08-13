@@ -6,7 +6,7 @@
 
 body, html {
   font-family: sans-serif;
-  background-color: #f9f9f9;
+  background-color: #ffffff;
   color: #333;
 }
 
@@ -87,7 +87,7 @@ body, html {
   }
 
   .song-grid {
-    grid-template-columns: 1fr; /* stack vertically */
+    grid-template-columns: 3fr; /* stack vertically */
   }
 }
 

@@ -62,8 +62,7 @@ app.put("/songs/:id", (req, res) => {
   const sql = `
     UPDATE songs 
     SET title = ?, artist = ?, url = ?, img = ?, duration = ? 
-    WHERE id = ?
-  `;
+    WHERE id = ?`;
 
   db.query(sql, [title, artist, url, img, duration, id], (err, result) => {
     if (err) return res.status(500).json({ message: "❌ Update failed", error: err });
@@ -77,6 +76,6 @@ app.put("/songs/:id", (req, res) => {
 });
 
 // ✅ Start Server
-app.listen(3001, () => {
-  console.log("🚀 Server running on http://localhost:3001");
+app.listen(4001, () => {
+  console.log("🚀 Server running on http://localhost:4001");
 });

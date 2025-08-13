@@ -1,0 +1,49 @@
+import express from "express";
+import fetch from "node-fetch";
+import dotenv from "dotenv";
+import cors from "cors";
+
+dotenv.config(); // load .env
+
+const app = express();
+app.use(cors());
+
+const keyId = process.env.CLIENT_ID;
+const keySecret = process.env.CLIENT_SECRET;
+const auth = Buffer.from(`${keyId}:${keySecret}`).toString("base64");
+
+app.get("/login", (req, res) => {
+  const scopes = [
+    "streaming",
+    "user-read-email",
+    "user-read-private",
+    "user-modify-playback-state"
+  ].join(" ");
+
+  const redirect_uri = encodeURIComponent("https://music-app088.netlify.app/");
+
+  const authUrl = `https://accounts.spotify.com/authorize?response_type=code&client_id=${keyId}&scope=${encodeURIComponent(scopes)}&redirect_uri=${redirect_uri}`;
+  res.redirect(authUrl);
+});
+
+app.get("/callback", async (req, res) => {
+  const code = req.query.code || null;
+
+  const tokenRes = await fetch("https://accounts.spotify.com/api/token", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/x-www-form-urlencoded",
+      "Authorization": `Basic ${auth}`
+    },
+    body: new URLSearchParams({
+      code,
+      redirect_uri: "https://music-app088.netlify.app/",
+      grant_type: "authorization_code"
+    })
+  });
+
+  const tokenData = await tokenRes.json();
+  res.json(tokenData);
+});
+
+app.listen(3001, () => console.log("Backend running on http://localhost:3001"));

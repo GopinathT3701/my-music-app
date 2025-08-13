@@ -1,0 +1,99 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+
+.main-cont {
+  flex: 1;
+  padding: 20px;
+  border-radius: 10px;
+  background: #ffffff;
+  height: 100%;
+}
+
+
+.album-card {
+  width: 200px;
+  height: 300px;
+  padding: 16px;
+  margin: 10px;
+  border-radius: 10px;
+  background-color: white;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.album-info {
+  margin-bottom: 10px;
+}
+
+.album-audio audio {
+  width: 100%;
+  outline: none;
+}
+
+.album-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 1rem;
+  padding: 20px;
+}
+.album-cover {
+  height: 130px;
+  border-radius: 10px;
+  outline: none;
+}
+
+.album-container {
+  padding: 20px 20px 20px 20px;
+  background-color: #f9f9f9;
+  border-radius: 10px;
+}
+.album-sidebar {
+  width: 250px;
+  height:450;
+  background: #f3e8ff;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.nav-bar {
+  display: flex;
+  justify-content: space-between;
+  height: 100%;
+}
+
+.back{
+    background-color: #6a0dad;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+/* Make the page take full height */
+
+
+html, body, #root {
+  width: 100%;
+  height: 100%;
+}
+
+/* To ensure the layout spreads across the screen */
+/* .album-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 20px;
+  min-height: 100vh;
+  box-sizing: border-box;
+} */
