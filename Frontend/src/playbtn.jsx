@@ -5,7 +5,7 @@ export default function Btn() {
   const [deviceId, setDeviceId] = useState("");
 
   // Replace with your Render backend URL
-  const BACKEND_URL = "https://spotify-backend.onrender.com";
+  const BACKEND_URL = "https://spotify-backend-b3un.onrender.com";
 
   // Get access token from backend using ?code=...
   useEffect(() => {

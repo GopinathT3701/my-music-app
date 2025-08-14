@@ -21,7 +21,7 @@ app.get("/login", (req, res) => {
     "user-modify-playback-state"
   ].join(" ");
 
-  const redirect_uri = encodeURIComponent("https://isai-app.netlify.app/callback");
+  const redirect_uri = encodeURIComponent("https://spotify-backend-b3un.onrender.com/callback");
   const authUrl = `https://accounts.spotify.com/authorize?response_type=code&client_id=${keyId}&scope=${encodeURIComponent(scopes)}&redirect_uri=${redirect_uri}`;
   res.redirect(authUrl);
 });
@@ -39,7 +39,7 @@ app.get("/callback", async (req, res) => {
       },
       body: new URLSearchParams({
         code,
-        redirect_uri: "https://isai-app.netlify.app/callback",
+        redirect_uri: "https://spotify-backend-b3un.onrender.com/callback",
         grant_type: "authorization_code"
       })
     });
