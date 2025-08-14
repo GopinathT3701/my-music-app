@@ -1,21 +1,24 @@
-import React from 'react';
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 
 export default function Btn() {
   const [token, setToken] = useState("");
   const [deviceId, setDeviceId] = useState("");
+
+  // Replace with your Render backend URL
+  const BACKEND_URL = "https://spotify-backend.onrender.com";
 
   // Get access token from backend using ?code=...
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
     const code = params.get("code");
     if (code) {
-      fetch(`https://isai-app.netlify.app/callback?code=${code}`)
+      fetch(`${BACKEND_URL}/callback?code=${code}`)
         .then(res => res.json())
         .then(data => {
           setToken(data.access_token);
           console.log("Access Token:", data.access_token);
-        });
+        })
+        .catch(err => console.error("Token fetch error:", err));
     }
   }, []);
 
@@ -65,13 +68,10 @@ export default function Btn() {
   return (
     <div style={{ display: "flex", gap: 12 }}>
       {!token ? (
-        <a href="http://localhost:3000/login">Login with Spotify</a>
+        <a href={`${BACKEND_URL}/login`}>Login with Spotify</a>
       ) : (
-        <>
-          <button onClick={() => playTrack()}>Play Sample Track</button>
-        </>
+        <button onClick={() => playTrack()}>Play Sample Track</button>
       )}
     </div>
   );
 }
-
