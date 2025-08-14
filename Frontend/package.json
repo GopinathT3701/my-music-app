@@ -5,7 +5,6 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "start": "nodemon backend/playback.js",
     "build": "vite build",
     "lint": "eslint .",
     "preview": "vite preview"
