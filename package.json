@@ -4,8 +4,8 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "start": "node playback.js",
-    "dev": "nodemon playback.js",
+  "start": "node Backend/playback.js",
+  "dev": "nodemon Backend/playback.js",
     "lint": "eslint .",
     "preview": "vite preview"
   },
