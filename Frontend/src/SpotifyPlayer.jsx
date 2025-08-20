@@ -1,54 +1,60 @@
-import React, { useEffect, useState } from "react";
+// src/SpotifyPlayer.jsx
+import React, { useEffect } from "react";
 
-export default function SpotifyPlayer({ token }) {
-  const [player, setPlayer] = useState(null);
-  const [deviceId, setDeviceId] = useState("");
-
+export default function SpotifyPlayer({ token, onDeviceReady }) {
   useEffect(() => {
     if (!token) return;
 
-    // Spotify Web Playback SDK ready
+    // Define the Spotify Web Playback SDK callback
     window.onSpotifyWebPlaybackSDKReady = () => {
       const player = new window.Spotify.Player({
         name: "My Web Player",
-        getOAuthToken: cb => { cb(token); },
-        volume: 0.5
+        getOAuthToken: cb => cb(token),
+        volume: 0.5,
       });
 
-      setPlayer(player);
+      // When the player is ready
+      player.addListener("ready", async ({ device_id }) => {
+        console.log("Device ID ready:", device_id);
+        if (onDeviceReady) onDeviceReady(device_id);
 
-      // Ready
-      player.addListener("ready", ({ device_id }) => {
-        console.log("Ready with Device ID", device_id);
-        setDeviceId(device_id);
+        // Transfer playback to this device (makes it active)
+        try {
+          await fetch("https://api.spotify.com/v1/me/player", {
+            method: "PUT",
+            headers: {
+              Authorization: `Bearer ${token}`,
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              device_ids: [device_id],
+              play: false, // false = don't autoplay
+            }),
+          });
+          console.log("Device activated for playback!");
+        } catch (err) {
+          console.error("Error activating device:", err);
+        }
       });
 
+      // Player went offline
       player.addListener("not_ready", ({ device_id }) => {
-        console.log("Device ID has gone offline", device_id);
+        console.log("Device went offline:", device_id);
       });
 
+      // Connect the player
       player.connect();
     };
-  }, [token]);
 
-  // Play a track
-  const playTrack = async (uri) => {
-    if (!deviceId) return;
-    await fetch(`https://api.spotify.com/v1/me/player/play?device_id=${deviceId}`, {
-      method: "PUT",
-      body: JSON.stringify({ uris: [uri] }),
-      headers: {
-        "Content-Type": "application/json",
-        "Authorization": `Bearer ${token}`
-      },
-    });
-  };
+    // Dynamically load the Spotify Web Playback SDK
+    const script = document.createElement("script");
+    script.src = "https://sdk.scdn.co/spotify-player.js";
+    script.async = true;
+    document.body.appendChild(script);
 
-  return (
-    <div>
-      <button onClick={() => playTrack("spotify:track:3n3Ppam7vgaVa1iaRUc9Lp")}>
-        Play Song
-      </button>
-    </div>
-  );
+    // Cleanup
+    return () => document.body.removeChild(script);
+  }, [token, onDeviceReady]);
+
+  return null;
 }

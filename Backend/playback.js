@@ -12,17 +12,18 @@ app.use(cors());
 const CLIENT_ID = process.env.CLIENT_ID;
 const CLIENT_SECRET = process.env.CLIENT_SECRET;
 const REDIRECT_URI = "https://spotify-backend-b3un.onrender.com/callback";
-const FRONTEND_URI = "http://localhost:5173"; // replace with your frontend URL
+// const FRONTEND_URI = "http://localhost:5173"; // replace with your frontend URL
 
 const auth = Buffer.from(`${CLIENT_ID}:${CLIENT_SECRET}`).toString("base64");
 
-// Step 1: Redirect user to Spotify login
 app.get("/login", (req, res) => {
   const scopes = [
     "streaming",
     "user-read-email",
     "user-read-private",
-    "user-modify-playback-state"
+    "user-read-playback-state",
+    "user-modify-playback-state",
+    "user-read-currently-playing"
   ].join(" ");
 
   const authUrl = `https://accounts.spotify.com/authorize?response_type=code&client_id=${CLIENT_ID}&scope=${encodeURIComponent(scopes)}&redirect_uri=${encodeURIComponent(REDIRECT_URI)}`;

@@ -1,34 +1,37 @@
-import { useState } from "react";
-import React from 'react';
+// src/Apisearch.jsx
+import React, { useState } from "react";
 
-export default function Spotify({ token, deviceId, onPlay }) {
-  const [q, setQ] = useState("");
-  const [tracks, setTracks] = useState([]);
+export default function SpotifySearch({ token, deviceId, onPlay }) {
+  const [query, setQuery] = useState("");
+  const [results, setResults] = useState([]);
 
-  const search = async () => {
-    if (!token) return alert("Login first");
+  const searchTracks = async () => {
+    if (!token) return;
+
     const res = await fetch(
-      `https://api.spotify.com/v1/search?type=track&limit=10&q=${encodeURIComponent(q)}`,
+      `https://api.spotify.com/v1/search?q=${encodeURIComponent(query)}&type=track&limit=10`,
       { headers: { Authorization: `Bearer ${token}` } }
     );
+
     const data = await res.json();
-    setTracks(data?.tracks?.items || []);
+    setResults(data.tracks.items || []);
   };
 
   return (
     <div style={{ marginTop: 16 }}>
-      <div style={{ display: "flex", gap: 8 }}>
-        <input value={q} onChange={e => setQ(e.target.value)} placeholder="Search songs…" />
-        <button onClick={search}>Search</button>
-      </div>
+      <input
+        type="text"
+        value={query}
+        onChange={(e) => setQuery(e.target.value)}
+        placeholder="Search tracks..."
+      />
+      <button onClick={searchTracks}>Search</button>
 
-      <ul style={{ marginTop: 12 }}>
-        {tracks.map(t => (
-          <li key={t.id} style={{ marginBottom: 8 }}>
-            {t.name} — {t.artists.map(a => a.name).join(", ")}
-            <button style={{ marginLeft: 8 }} onClick={() => onPlay(t.uri)}>
-              Play
-            </button>
+      <ul>
+        {results.map((track) => (
+          <li key={track.id}>
+            {track.name} - {track.artists.map((a) => a.name).join(", ")}
+            <button onClick={() => onPlay(track.uri)}>Play</button>
           </li>
         ))}
       </ul>
