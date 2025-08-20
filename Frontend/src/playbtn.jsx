@@ -7,20 +7,23 @@ export default function Btn() {
 
   const BACKEND_URL = "https://spotify-backend-b3un.onrender.com";
 
-  // Step 1: Get tokens from backend after login
+  // Step 1: Get tokens from URL after redirect
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
-    const code = params.get("code");
+    const accessToken = params.get("access_token");
+    const refreshTok = params.get("refresh_token");
+    const expiresIn = params.get("expires_in");
 
-    if (code) {
-      fetch(`${BACKEND_URL}/callback?code=${code}`)
-        .then(res => res.json())
-        .then(data => {
-          setToken(data.access_token);
-          setRefreshToken(data.refresh_token); // store refresh token
-          console.log("Access Token:", data.refresh_token);
-        })
-        .catch(err => console.error("Token fetch error:", err));
+    if (accessToken) {
+      setToken(accessToken);
+      setRefreshToken(refreshTok);
+      console.log("Access Token:", accessToken);
+      console.log("Refresh Token:", refreshTok);
+
+      // Optionally: setup auto-refresh before expiry
+      if (expiresIn) {
+        setTimeout(refreshAccessToken, (expiresIn - 60) * 1000); // refresh 1 min before expiry
+      }
     }
   }, []);
 
@@ -31,36 +34,35 @@ export default function Btn() {
       .then(res => res.json())
       .then(data => {
         setToken(data.access_token);
-        // console.log("New Access Token:", data.access_token);
+        console.log("🔄 New Access Token:", data.access_token);
       })
       .catch(err => console.error("Refresh token failed:", err));
   };
 
   // Step 3: Load Spotify Player
-useEffect(() => {
-  if (!token) return;
+  useEffect(() => {
+    if (!token) return;
 
-  window.onSpotifyWebPlaybackSDKReady = () => {
-    const player = new Spotify.Player({
-      name: "Isai Player",
-      getOAuthToken: cb => cb(token),
-      volume: 0.5
-    });
+    window.onSpotifyWebPlaybackSDKReady = () => {
+      const player = new Spotify.Player({
+        name: "Isai Player",
+        getOAuthToken: cb => cb(token),
+        volume: 0.5
+      });
 
-    player.addListener("initialization_error", ({ message }) => console.error(message));
-    player.addListener("authentication_error", ({ message }) => console.error(message));
-    player.addListener("account_error", ({ message }) => console.error(message));
-    player.addListener("playback_error", ({ message }) => console.error(message));
+      player.addListener("initialization_error", ({ message }) => console.error(message));
+      player.addListener("authentication_error", ({ message }) => console.error(message));
+      player.addListener("account_error", ({ message }) => console.error(message));
+      player.addListener("playback_error", ({ message }) => console.error(message));
 
-    player.addListener("ready", ({ device_id }) => {
-      console.log("Ready with Device ID", device_id);
-      setDeviceId(device_id); // store in state
-    });
+      player.addListener("ready", ({ device_id }) => {
+        console.log("✅ Ready with Device ID", device_id);
+        setDeviceId(device_id);
+      });
 
-    player.connect();
-  };
-}, [token]);
-
+      player.connect();
+    };
+  }, [token]);
 
   // Step 4: Play track
   const playTrack = async (uri = "spotify:track:4uLU6hMCjMI75M1A2tKUQC") => {

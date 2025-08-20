@@ -10,11 +10,29 @@ export default function App() {
   const [currentTrack, setCurrentTrack] = useState(null); // Optional: show current track
 
   // Get token from URL
-  useEffect(() => {
-    const params = new URLSearchParams(window.location.search);
-    const access_token = params.get("access_token");
-    if (access_token) setToken(access_token);
-  }, []);
+useEffect(() => {
+  const params = new URLSearchParams(window.location.search);
+  const access_token = params.get("access_token");
+  const refresh_token = params.get("refresh_token");
+  const expires_in = params.get("expires_in");
+
+  if (access_token) {
+    setToken(access_token);
+    console.log("Access Token:", access_token);
+  } else {
+    console.error("No access token found in callback URL");
+  }
+
+  if (refresh_token) {
+    localStorage.setItem("refresh_token", refresh_token);
+    console.log("Refresh Token saved:", refresh_token);
+  }
+
+  if (expires_in) {
+    const expiryTime = Date.now() + expires_in * 1000;
+    localStorage.setItem("token_expiry", expiryTime);
+  }
+}, []);
 
   useEffect(() => {
   const checkScopes = async () => {
