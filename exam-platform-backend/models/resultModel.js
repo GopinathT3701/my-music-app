@@ -29,7 +29,20 @@ async function getResultsByUserId(userId) {
   return rows;
 }
 
+async function countTodaysAttemptsByUserId(userId) {
+  const [rows] = await db.execute(
+    `SELECT COUNT(*) AS attempts
+     FROM results
+     WHERE user_id = ?
+       AND DATE(attempted_at) = CURDATE()`,
+    [userId],
+  );
+
+  return Number(rows[0]?.attempts || 0);
+}
+
 module.exports = {
   createResult,
   getResultsByUserId,
+  countTodaysAttemptsByUserId,
 };

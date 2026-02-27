@@ -1,13 +1,29 @@
 const examModel = require("../models/examModel");
 const questionModel = require("../models/questionModel");
 const resultModel = require("../models/resultModel");
+const userModel = require("../models/userModel");
 
 async function submitTest(req, res) {
   try {
     const { examId, answers } = req.body;
+    const userId = req.user.id;
 
     if (!examId || !Array.isArray(answers)) {
       return res.status(400).json({ message: "examId and answers are required" });
+    }
+
+    const user = await userModel.findById(userId);
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    if (!user.subscription_active) {
+      const todaysAttempts = await resultModel.countTodaysAttemptsByUserId(userId);
+      if (todaysAttempts >= 2) {
+        return res.status(403).json({
+          message: "Free users can submit only 2 tests per day. Upgrade to premium for unlimited tests.",
+        });
+      }
     }
 
     const exam = await examModel.getExamById(Number(examId));
@@ -31,7 +47,7 @@ async function submitTest(req, res) {
     const percentage = totalQuestions === 0 ? 0 : Number(((score / totalQuestions) * 100).toFixed(2));
 
     const savedResult = await resultModel.createResult({
-      user_id: req.user.id,
+      user_id: userId,
       exam_id: Number(examId),
       score,
       percentage,
