@@ -1,16 +1,26 @@
-<<<<<<< HEAD
-# React + Vite
+# My Music App + Exam Platform Backend Scaffold
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+This repository now includes an exam platform backend scaffold using Node.js, Express, MySQL, JWT, and bcrypt.
 
-Currently, two official plugins are available:
+## New backend module
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+Path: `exam-platform-backend/`
 
-## Expanding the ESLint configuration
+### Features included
+- JWT auth (`/api/auth/register`, `/api/auth/login`)
+- Exam APIs (`/api/exams`, `/api/exams/:id`, admin-only create exam)
+- Test submission and result APIs (`/api/test/submit`, `/api/test/results/:userId`)
+- Role-based middleware (`USER` and `ADMIN`)
+- MySQL models for users, exams, questions, and results
+- SQL schema file at `exam-platform-backend/schema.sql`
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
-=======
-# my-music-app
->>>>>>> 8f45987f42bc93dd920c034a1536408296eb4762
+## Quick start
+
+```bash
+cd exam-platform-backend
+cp .env.example .env
+npm install
+npm run dev
+```
+
+Server defaults to `http://localhost:5000`.
